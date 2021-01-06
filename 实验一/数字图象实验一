@@ -1,0 +1,85 @@
+"""
+#!/usr/bin/env python3
+
+import scipy.misc
+import pandas as pd
+from PIL import Image 
+import numpy as np
+import skimage
+data1 = Image.open('000.jpg')
+data_after=np.array(data1)
+
+#打印图片大小
+print('图片宽度为：'+str(len(data_after[0])))
+print('图片高度为：'+str(len(data_after)))
+
+#转灰度图
+data2= data1.convert('L')
+#data2.show()
+#data2.close()
+data2.save('灰度图.jpg')
+d2=np.array(data2)
+
+#计算相关信息
+print('该图标准差为 '+str(data_after.std()))
+print('该图均值为 '+str(data_after.mean()))
+print('该图方差为 '+str(data_after.var()))
+
+#添加噪声
+
+salt=skimage.util.random_noise(data_after, mode='salt')
+pepper=skimage.util.random_noise(data_after, mode='pepper')
+
+s=Image.fromarray(np.uint8(255*salt))
+p=Image.fromarray(np.uint8(255*pepper))
+o=Image.fromarray(np.uint8(255*data_after))
+s.save('salt.jpg')
+p.save('pepper.jpg')
+
+ss=np.array(s.convert('L'))
+pp=np.array(p.convert('L'))
+
+'''
+s.show()
+s.close()
+p.show()
+p.close()
+o.show()
+o.close()
+'''
+#计算协方差和相关系数矩阵
+
+cov1 = np.cov(d2,ss)
+coef1=np.corrcoef(d2,ss)
+print(cov1)
+print(coef1)
+
+cov2 = np.cov(d2,pp)
+coef2=np.corrcoef(d2,pp)
+print(cov2)
+print(coef2)
+
+"""
+
+#创建图像
+from PIL import Image
+import numpy as np
+
+img = Image.new("L",(256,256))
+pixTuple = (0)
+pix2=(100)
+
+for i in range(256):
+    for j in range(256):
+        img.putpixel((i,j),pixTuple)
+        
+for i in range(112,144):v bvb
+    for j in range(64,192):
+        img.putpixel((i,j),pix2)
+#img.show()
+img = np.array(img)
+#print(img)
+transformed = np.fft.fft2(img)
+img = Image.fromarray(abs(transformed).astype('uint8')).convert('L')
+img.show()
+#img.save("bb.png")
